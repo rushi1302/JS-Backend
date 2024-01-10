@@ -3,14 +3,30 @@
 // always import dotenv at the top of root file.
 import dotenv from 'dotenv';
 import connectDB from './db/index.js';
+import { app } from './app.js';
 dotenv.config({
-    path: './env'
+    path: './.env'
 })
 
 
-connectDB();
+connectDB().then(() => {
+    app.on("error", (error) => {
+        console.log("ERROR: ", error);
+    })
+    app.listen(process.env.PORT || 9000, () => {
+        console.log("App is Listening on ", process.env.PORT);
+    })
+}).catch((error) => {
+    console.log("MongoDB connection failed", error)
+})
 
 
+
+
+
+
+
+// another way to connect with DB
 
 // import mongoose from "mongoose";
 // import express from 'express'
